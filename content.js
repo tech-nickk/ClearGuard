@@ -92,8 +92,19 @@ Allow submission?\n\nClick "Cancel" to deny submission and close the webpage, or
       form.submit();
     } else {
       // User clicked "Cancel" to deny submission
-      // window.close(); // Close the current browser tab or window
-      window.location.href = 'about:blank';
+      window.alert("This webpage has been blocked due to potential privacy concerns.");
+      window.stop(); // Stop loading the current page
+
+      try {
+        if (window.opener) {
+          window.opener.close(); // Close the window that opened the current window/tab
+        } else {
+          window.close(); // Attempt to close the current window/tab
+        }
+      } catch (error) {
+        // If window.close() fails, provide an alternative action (e.g., redirect to a different page)
+        window.location.href = 'about:blank'; // Replace with the desired URL
+      }
     }
   }
 }
