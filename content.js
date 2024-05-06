@@ -87,24 +87,17 @@ Allow submission?\n\nClick "Cancel" to deny submission and close the webpage, or
 
     const result = confirm(alertMessage);
 
-    if (result) {
-      // User clicked "OK" to allow submission
-      form.submit();
-    } else {
+   if (!result) {
       // User clicked "Cancel" to deny submission
       window.alert("This webpage has been blocked due to potential privacy concerns.");
       window.stop(); // Stop loading the current page
 
-      try {
-        if (window.opener) {
-          window.opener.close(); // Close the window that opened the current window/tab
-        } else {
-          window.close(); // Attempt to close the current window/tab
-        }
-      } catch (error) {
-        // If window.close() fails, provide an alternative action (e.g., redirect to a different page)
-        window.location.href = 'about:blank'; // Replace with the desired URL
-      }
+      // Redirect to a different URL instead of attempting to close the window/tab
+      window.location.href = 'about:blank'; // Replace with the desired URL
+    } else {
+      // User clicked "OK" to allow submission
+      form.submit();
+    }
     }
   }
 }
