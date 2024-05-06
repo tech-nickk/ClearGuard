@@ -92,7 +92,8 @@ Allow submission?\n\nClick "Cancel" to deny submission and close the webpage, or
       form.submit();
     } else {
       // User clicked "Cancel" to deny submission
-      window.close(); // Close the current browser tab or window
+      // window.close(); // Close the current browser tab or window
+      window.location.href = 'about:blank';
     }
   }
 }
