@@ -3,7 +3,7 @@
 // List of PII categories
 const personalData = ["name", "dob", "birthdate", "birthday", "email", "phone", "address"];
 const sensitivePersonalData = ["password", "username", "login", "credit card", "card number", "expiry", "cvv", "ssn", "social security", "passport", "driver", "license"];
-const generalData = []; // Add any general data keywords if needed or according to your specifics
+const generalData = []; // Add any general data keywords if needed
 
 // Listen for form submission events
 document.addEventListener('submit', handleFormSubmission);
@@ -91,13 +91,37 @@ Allow submission?`;
     const result = confirm(alertMessage);
 
     if (result) {
-      // User clicked "OK" to allow submission
+      // User clicked "Allow" to allow submission
       form.submit();
-    } else {
-      // User clicked "Cancel" to deny submission
-      window.close(); // Close the current browser tab or window
-    }
+  } else {
+      // User clicked "Deny" to deny submission
+      window.alert("This webpage has been blocked due to potential privacy concerns.");
+      window.stop(); // Stop loading the current page
+  
+      // Redirect to a different URL instead of attempting to close the window/tab
+      window.location.href = 'https://google.com'; // Replace with the desired URL
   }
+
+    // Store the analytics data for the current URL
+    storeAnalyticsData(currentUrl, piiAnalysis);
+  }
+}
+
+// Function to store analytics data
+function storeAnalyticsData(url, piiAnalysis) {
+  chrome.storage.local.get('analyticsData')
+    .then(result => {
+      const analyticsData = result.analyticsData || {};
+      analyticsData[url] = {
+        personalDataPercentage: piiAnalysis.personalDataPercentage,
+        sensitivePersonalDataPercentage: piiAnalysis.sensitivePersonalDataPercentage,
+        generalDataPercentage: piiAnalysis.generalDataPercentage,
+      };
+      return chrome.storage.local.set({ analyticsData });
+    })
+    .catch(error => {
+      console.error('Error storing analytics data:', error);
+    });
 }
 
 // MutationObserver for automatic detection
